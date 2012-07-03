@@ -47,6 +47,7 @@ get '/auth/github/callback' do
     access_token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri)
     user = JSON.parse(access_token.get('/user').body)
     session[:token] = access_token.token;
+    session[:user] = Hash.new(nil);
     session[:user][:login] = user.login;
     session[:user][:email] = user.email;
     session[:user][:id] = user.id;
