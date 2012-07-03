@@ -48,9 +48,9 @@ get '/auth/github/callback' do
     user = JSON.parse(access_token.get('/user').body)
     session[:token] = access_token.token;
     session[:user] = Hash.new(nil);
-    session[:user][:login] = user.login;
-    session[:user][:email] = user.email;
-    session[:user][:id] = user.id;
+    session[:user][:login] = user[:login];
+    session[:user][:email] = user[:email];
+    session[:user][:id] = user[:id];
     
     
     "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
