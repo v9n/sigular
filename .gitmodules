@@ -1,0 +1,3 @@
+[submodule "views/bootstrap"]
+	path = views/bootstrap
+	url = https://github.com/twitter/bootstrap.git

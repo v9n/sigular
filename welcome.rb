@@ -1,11 +1,45 @@
 require 'sinatra'
 require 'json'
+require 'haml'
 require 'net/http'
 require 'uri'
 require 'open-uri'
 
+
+configure do
+	set :logging, :true
+
+  # setting one option
+  set :option, 'value'
+
+  # setting multiple options
+  set :a => 1, :b => 2
+
+  # same as `set :option, true`
+  enable :option
+
+  # same as `set :option, false`
+  disable :option
+
+  # you can also have dynamic settings with blocks
+  set(:css_dir) { File.join(views, 'css') }
+end
+
 get '/' do
-	"Welcome to Sibex. Regulare Expression 
+	haml :index
+end
+
+get '/style' do
+	less :style
+end
+
+get '/do' do
+	"Welcome to Sibex. Regulare Expression experimental"
+
+r = /<([a-zA-Z0-9]+)/
+s = "This is a <strong>test</strong> test string"
+c = s.match r
+ "result =" << s.inspect
 end
 
 get '/about' do
