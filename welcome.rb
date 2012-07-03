@@ -27,7 +27,6 @@ get '/' do
 	haml :index, :locals => {:user => session[:user]}
 end
 
-
 def client
   OAuth2::Client.new(settings.CLIENT_ID, settings.CLIENT_SECRET,
                      :ssl => {:ca_file => '/etc/ssl/ca-bundle.pem'},
