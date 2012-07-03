@@ -18,11 +18,13 @@ configure do
 	
   # you can also have dynamic settings with blocks
   set(:css_dir) { File.join(views, 'css') }
+	enable :sessions  
 end
 
 
 get '/' do
-	haml :index
+	
+	haml :index, :locals => {:user => session[:user]}
 end
 
 
@@ -45,6 +47,12 @@ get '/auth/github/callback' do
   begin
     access_token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri)
     user = JSON.parse(access_token.get('/user').body)
+    session[:token] = access_token.token;
+    session[:user][:login] = user.login;
+    session[:user][:email] = user.email;
+    session[:user][:id] = user.id;
+    
+    
     "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
   rescue OAuth2::Error => e
     %(<p>Outdated ?code=#{params[:code]}:</p><p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
