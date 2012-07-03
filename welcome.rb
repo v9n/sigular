@@ -35,7 +35,7 @@ def client
 end
 
 get '/auth/github' do
-  url = client.auth_code.authorize_url(:redirect_uri => , :scope => 'gist')
+  url = client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => 'gist')
   puts "Redirecting to URL: #{url.inspect}"
   redirect url
 end
@@ -52,7 +52,7 @@ get '/auth/github/callback' do
 end
 
 def redirect_uri(path = '/auth/github/callback', query = nil)
-  //uri = URI.parse(request.url)
+  #uri = URI.parse(request.url)
   uri = URI.parse(url(path))
   uri.path = path
   uri.query = query
