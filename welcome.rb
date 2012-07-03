@@ -4,29 +4,59 @@ require 'haml'
 require 'net/http'
 require 'uri'
 require 'open-uri'
-
+require 'oauth2'
 
 configure do
 	set :logging, :true
-
-  # setting one option
-  set :option, 'value'
-
-  # setting multiple options
-  set :a => 1, :b => 2
-
+	set :CLIENT_ID => 'd00b37e0fbf1488e8d49', :CLIENT_SECRET => '971ba392a08327aaa02b598ac71bc9258c1314cd'
+ 
   # same as `set :option, true`
   enable :option
 
   # same as `set :option, false`
-  disable :option
-
+  disable :option	
+	
   # you can also have dynamic settings with blocks
   set(:css_dir) { File.join(views, 'css') }
 end
 
+
 get '/' do
 	haml :index
+end
+
+
+def client
+  OAuth2::Client.new(settings.CLIENT_ID, settings.CLIENT_SECRET,
+                     :ssl => {:ca_file => '/etc/ssl/ca-bundle.pem'},
+                     :site => 'https://api.github.com',
+                     :authorize_url => 'https://github.com/login/oauth/authorize',
+                     :token_url => 'https://github.com/login/oauth/access_token')
+end
+
+get '/auth/github' do
+  url = client.auth_code.authorize_url(:redirect_uri => , :scope => 'gist')
+  puts "Redirecting to URL: #{url.inspect}"
+  redirect url
+end
+
+get '/auth/github/callback' do
+  puts params[:code]
+  begin
+    access_token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri)
+    user = JSON.parse(access_token.get('/user').body)
+    "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
+  rescue OAuth2::Error => e
+    %(<p>Outdated ?code=#{params[:code]}:</p><p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
+  end
+end
+
+def redirect_uri(path = '/auth/github/callback', query = nil)
+  //uri = URI.parse(request.url)
+  uri = URI.parse(url(path))
+  uri.path = path
+  uri.query = query
+  uri.to_s
 end
 
 get '/style' do
@@ -36,10 +66,10 @@ end
 get '/do' do
 	"Welcome to Sibex. Regulare Expression experimental"
 
-r = /<([a-zA-Z0-9]+)/
-s = "This is a <strong>test</strong> test string"
+r = /<([a-zA-Z0-9]*)>/
+s = "This is a <psa><strong>test</strong> <a title=\"sasa\">test string<p>"
 c = s.match r
- "result =" << s.inspect
+ "result =" << c.inspect
 end
 
 get '/about' do
