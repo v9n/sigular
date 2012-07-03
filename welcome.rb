@@ -24,7 +24,7 @@ end
 
 get '/' do
 	
-	haml :index, :locals => {:user => session[:user]}
+	haml :index, :locals => {}
 end
 
 def client
