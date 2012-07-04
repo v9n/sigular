@@ -21,10 +21,17 @@ configure do
 	enable :sessions  
 end
 
+#
+#Your OAuth access token: 2ed1d303c6d9db90e9be50b706983356fe5e7227
+#Your extended profile data: {"html_url"=>"https://github.com/kureikain", "type"=>"User", "location"=>"San Jose, California, USA", "company"=>"Axcoto", "gravatar_id"=>"659d0c8387cefd176347beef316688cd", "public_repos"=>42, "login"=>"kureikain", "following"=>99, "blog"=>"http://axcoto.com/", "public_gists"=>31, "hireable"=>true, "followers"=>10, "name"=>"Vinh Quốc Nguyễn", "avatar_url"=>"https://secure.gravatar.com/avatar/659d0c8387cefd176347beef316688cd?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png", "email"=>"kureikain@gmail.com", "bio"=>"Web developer who loves to work with both of back-end, front-end stuff and even sys admin too. Thing changed so much since the first day I touch to that kind of machine.\r\n", "url"=>"https://api.github.com/users/kureikain", "id"=>49754, "created_at"=>"2009-01-27T21:11:00Z"}
 
 get '/' do
-	
+		
 	haml :index, :locals => {}
+end
+
+get '/session' do
+	"session is #{session.inspect}"
 end
 
 def client
