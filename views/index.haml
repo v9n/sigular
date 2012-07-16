@@ -1,3 +1,39 @@
-%strong{:class => "code", :id => "message"} Hello, World!
-%span Hello 
-%a{:href => url('auth/github'), :title => "Login with GitHub"} Login via Github
+.row-fluid
+	%form#sibex-regex.well{:method => 'POST', :action => 'save'}
+		%fieldset
+			%legend Your regular expression 
+			.control-group
+				.input-prepend
+					%span.add-on>< &#47; 
+					%input.span10{:type => 'text', :placeholder => ''}
+					%span.add-on>< &#47;
+					%input.input-mini{:type => 'text'}
+			.form-action
+				%a.btn.btn-primary#more-test 
+					%i.icon-plus					
+					More Test String
+
+		%fieldset#test-string-wrap
+			.control-group.test-string.row-fluid		
+				.span6
+					%textarea{:cols => '3', 'class' => 'span12', :name => 'testString[]'} huh
+				.span6.test-result
+					%h6 Result
+					%p.masked-string-result	
+					%pre.prettyprint.linenums
+
+			.control-group.test-string.row-fluid		
+				.span6
+					%textarea{:cols => '3', 'class' => 'span12', :name => 'testString[]'} uh
+				.span6.test-result
+					%h6 Result
+					%p.masked-string-result
+					%pre.prettyprint.linenums
+				
+			.control-group.test-string.row-fluid		
+				.span6
+					%textarea{:cols => '3', 'class' => 'span12', :name => 'testString[]'} hu
+				.span6.test-result			
+					%h6 Result
+					%p.masked-string-result	
+					%pre.prettyprint.linenums

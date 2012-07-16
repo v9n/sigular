@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'sinatra'
 require 'json'
 require 'haml'
@@ -5,6 +6,7 @@ require 'net/http'
 require 'uri'
 require 'open-uri'
 require 'oauth2'
+require 'less'
 
 configure do
 	set :logging, :true
@@ -19,6 +21,18 @@ configure do
   # you can also have dynamic settings with blocks
   set(:css_dir) { File.join(views, 'css') }
 	enable :sessions  
+  
+  #Less.paths << settings.views
+
+end
+
+helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+
+  def nl2br(s)
+    s.gsub(/\r?\n/, "<br />") 
+  end
 end
 
 #
@@ -28,6 +42,10 @@ end
 get '/' do
 		
 	haml :index, :locals => {}
+end
+
+get '/session/s' do
+  session[:user] = 'kureikain'
 end
 
 get '/session' do
@@ -41,6 +59,89 @@ def client
                      :authorize_url => 'https://github.com/login/oauth/authorize',
                      :token_url => 'https://github.com/login/oauth/access_token')
 end
+
+get '/css/:style.css' do
+	less params[:style].to_sym, :paths => ["public/css"], :layout => false
+end
+
+get '/do' do
+	"Welcome to Sibex. Regulare Expression experimental"
+
+r = /<([a-zA-Z0-9]*)>/
+s = "This is a <psa><strong>test</strong> <a title=\"sasa\">test string<p>"
+c = s.scan r
+ "result =" << c.inspect
+end
+
+
+post '/do3' do
+  result = Array.new
+  result << params[:testString]
+  result.inspect
+end
+
+post '/do2' do
+  result = Array.new
+  parsed_string = Array.new
+  result << {'myNumber' => params[:myNumber]}
+  #r = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/i; This is for ruby 1.9+ 
+  r = /(\d{1,2})\/(\d{1,2})\/(\d{4})/i
+  s = "Today's date is: 7/15/2012. Obon Festival is on 10/10/2012"
+  c = s.scan r
+
+  resule_element = Array.new
+  s.gsub! r do |m|
+    "{{mark}#{m}{mark}}"
+  end 
+  result << [s, c]
+
+  r = /<([a-zA-Z0-9]*)>/
+  s = "This is a <psa><strong>test</strong> <a title=\"sasa\">test string<p>"
+  c = s.scan r
+
+  s.gsub! r do |m|
+    "{{mark}#{m}{mark}}"
+  end 
+  result << [s, c]
+
+
+  r = /<tr>([0-9]+)<td>(?<manga>[^<]+)<\/td><\/tr>/im;
+  s = "Today's date is: 7/15/2012.
+      <tr>1<td>Breakshot</td></tr>
+help di hà hâ hố hê ma h
+  lop 
+    <tr>2<td>Bartender</td></tr>"
+
+  c = s.scan r
+
+  s.gsub! r do |m|
+     "{{mark}#{m}{mark}}"
+  end 
+  result << [s, c]
+
+  result = result.map do |m|
+    m[0] = h m[0]
+    m[0].gsub!("{{mark}", '<span class="label label-success">')
+    m[0].gsub!("{mark}}", "</span>")
+    nl2br(m[0])
+    m
+  end
+
+ # parsed_string.inspect
+  content_type :json
+  result.to_json
+  #{}"#{parsed_string.join('<br />')}<br />#{result.join('<br />')}"
+end
+
+get '/about' do
+  "@kureikain"
+end
+
+get '/help' do
+  "@Help Page"
+end
+
+
 
 get '/auth/github' do
   url = client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => 'gist')
@@ -73,77 +174,3 @@ def redirect_uri(path = '/auth/github/callback', query = nil)
   uri.query = query
   uri.to_s
 end
-
-get '/style' do
-	less :style
-end
-
-get '/do' do
-	"Welcome to Sibex. Regulare Expression experimental"
-
-r = /<([a-zA-Z0-9]*)>/
-s = "This is a <psa><strong>test</strong> <a title=\"sasa\">test string<p>"
-c = s.match r
- "result =" << c.inspect
-end
-
-get '/about' do
-  "@kureikain"
-end
-
-get '/help' do
-  "@Help Page"
-end
-
-
-get '/api/site' do
-	content_type :json
-	{:vechai => 'Vechai', :vnsharing => 'VnSharing', :blogtruyen => 'BlogTruyen' }.to_json
-end
-
-
-get '/api/:site/list' do
-	content_type :json
-	@url = "http://truyen.vnsharing.net/DanhSach";
-	url = URI.parse(@url)
-
-        str = ''
-        open(url) {|f| #url must specify the protocol
-            str += f.read()
-        }
-        
-end
-
-get '/api/:manga/info' do
-	@manga = params[:manga]
-	@manga
-end
-
-get '/api/:site/:manga/chapter' do
-	@manga = params[:manga]
-	content_type :json
-	chapter = Array.new
-	chapter[0] = "Chapter 1"	
-	chapter[1] = "Chapter 2"	
-	chapter[2] = "Chapter 3"	
-	chapter[3] = "Chapter 4"
-	chapter.to_json
-end
-
-get '/api/:site/:manga/:chapter/content' do
-	content_type :json
-	@manga = params[:manga]
-	@chapter = params[:chapter]
-	pic = Array.new
-	pic[0] = "Asaa asa"
-	pic[1] = "Asaa sa asa"
-	pic[2] = "Asaa s a asa"
-	pic[3] = "As saaa asa"
-	pic[4] = "As saaa asa"
-	pic[5] = "Asa saa asa"
-	pic[6] = "As saaa asa"
-	pic[7] = "As sa aa asa"
-	pic.to_json
-end
-
-
