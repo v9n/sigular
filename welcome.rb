@@ -8,6 +8,19 @@ require 'open-uri'
 require 'oauth2'
 require 'less'
 
+class String
+  def scan2(regexp)
+    names = regexp.names
+    if (names.count>0)
+      scan(regexp).collect do |match|
+        Hash[names.zip(match)]
+      end
+    else
+      scan regexp
+    end  
+  end
+end
+
 configure do
 	set :logging, :true
 	set :CLIENT_ID => 'd00b37e0fbf1488e8d49', :CLIENT_SECRET => '971ba392a08327aaa02b598ac71bc9258c1314cd'
@@ -80,14 +93,54 @@ post '/do3' do
   result.inspect
 end
 
+post '/evaluate' do
+=begin
+   TEST 1:
+   <i>(?<num>[0-9]+)</i><p>(?<manga>[^<]+)<\/p>
+   
+    sasas<i>1</i><p>Breakshot</p>
+    l sa sa<p>kazu</p> as sa
+
+    sasas<i>2</i><p>Breakshot</p>
+    l sa sa<p>kazu</p> as sa
+=end
+
+  result = Array.new
+  result << {'myNumber' => params[:myNumber]}
+  r = params[:r]
+  testString = params[:s]
+  if (r.length==0 || testString.count==0) 
+    halt 500, 'Invalid Data!'
+  end
+  r = Regexp.new(r, true);
+  testString.collect do |s|
+    c = s.scan2 r
+    s.gsub! r do |m|
+      "{{mark}#{m}{mark}}"
+    end 
+    result << [s, c]
+  end  
+  
+  result = result.map do |m|
+    m[0] = h m[0]
+    m[0].gsub!("{{mark}", '<span class="label label-success">')
+    m[0].gsub!("{mark}}", "</span>")
+    nl2br(m[0])
+    m
+  end
+
+  content_type :json
+  result.to_json
+end
+
 post '/do2' do
   result = Array.new
   parsed_string = Array.new
   result << {'myNumber' => params[:myNumber]}
-  #r = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/i; This is for ruby 1.9+ 
-  r = /(\d{1,2})\/(\d{1,2})\/(\d{4})/i
+  r = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/i; 
+  #r = /(\d{1,2})\/(\d{1,2})\/(\d{4})/i
   s = "Today's date is: 7/15/2012. Obon Festival is on 10/10/2012"
-  c = s.scan r
+  c = s.scan2 r
 
   resule_element = Array.new
   s.gsub! r do |m|
@@ -97,7 +150,7 @@ post '/do2' do
 
   r = /<([a-zA-Z0-9]*)>/
   s = "This is a <psa><strong>test</strong> <a title=\"sasa\">test string<p>"
-  c = s.scan r
+  c = s.scan2 r
 
   s.gsub! r do |m|
     "{{mark}#{m}{mark}}"
@@ -112,7 +165,7 @@ help di hà hâ hố hê ma h
   lop 
     <tr>2<td>Bartender</td></tr>"
 
-  c = s.scan r
+  c = s.scan2 r
 
   s.gsub! r do |m|
      "{{mark}#{m}{mark}}"
