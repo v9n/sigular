@@ -41,7 +41,7 @@ Sigular.prototype.handleResponse = function (data) {
 				elem.append($('<li>').text(matcheObject));						
 			} else {	
 				for (var k in matcheObject) {
-					li.push( [k, ':&nbsp;', matcheObject[k]].join('') );								
+					li.push( ['<code class="label">',k, '</code>:&nbsp;', matcheObject[k]].join('') );								
 				}
 				console.log(li);
 				elem.append($('<li>').html(li.join("\n")));			

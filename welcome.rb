@@ -108,6 +108,14 @@ post '/evaluate' do
     \(([a-zA-Z\s_-]+)\)
 
     huhgygu(sa) sas(num)
+
+    TEST 3
+    \((?<name>[a-zA-Z\s_-]+)\)
+    huh(tieu phug) huh(sa man)
+
+    TEST 4
+    \((?<name>[a-zA-Z\s_-]+)\)[a-zA-Z\s]+(?<age>[0-9]+)
+    huh(tieu phug) hu 15 h(sa man)a tuoi 29
 =end
 
   result = Array.new
