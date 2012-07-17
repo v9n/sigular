@@ -54,8 +54,9 @@ Sigular.prototype.handleResponse = function (data) {
 Sigular.prototype.addTest = function () {
 	var newElem = $('.test-string:first').clone();
 	$('textarea', newElem).val('').text('');
-	$('textarea', newElem).val('').text('');
-	
+	$('pre', newElem).val('').text('');
+	$('p', newElem).val('').text('');
+
 	newElem.appendTo('#test-string-wrap');
 }
 
@@ -82,11 +83,11 @@ Sigular.prototype.viewGist = function () {
 
 	$('#more-test').click(function (e) {
 		e.preventDefault();
-		Sigular.addTest();
-
+		sigular.addTest();
 	});
 
-	$('input, textarea', '#sigular-regex').keyup(function () {
+	//$('input, textarea', '#sigular-regex').keyup(function () {
+	$('#sigular-regex').keyup(function () {	
 		sigular.execute();
 	})	
 })(jQuery);

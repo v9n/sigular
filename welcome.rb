@@ -103,6 +103,11 @@ post '/evaluate' do
 
     sasas<i>2</i><p>Breakshot</p>
     l sa sa<p>kazu</p> as sa
+
+    TEST 2:
+    \(([a-zA-Z\s_-]+)\)
+
+    huhgygu(sa) sas(num)
 =end
 
   result = Array.new
