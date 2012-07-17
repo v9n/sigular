@@ -1,6 +1,8 @@
-== What is Sibex ==
+== What is Sigular ==
 
-Sibex is a tool to help you play around regular expression in Ruby. You can save your RegEx on Git, Share it to your friend
+Sigular = Sinatra + Regulare Expression
+
+Sigular is a tool to help you play around regular expression in Ruby based on Sinatra. You can also save your RegEx on Git, Share it to your friend
 
 == How to contribute ==
 
