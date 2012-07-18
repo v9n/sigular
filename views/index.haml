@@ -3,6 +3,10 @@
 		%fieldset
 			%legend Your regular expression 
 			.control-group
+				%label Short describption of this regex
+				%input.span12{:type => 'text', :name => 'description'}
+						
+			.control-group
 				.input-prepend
 					%span.add-on>< &#47; 
 					%input.span10{:type => 'text', :placeholder => '\((?<name>[a-zA-Z\s_-]+)\)[^0-9]+(?<age>[0-9]+)', :'name' => 'r', :value => '\((?<name>[a-zA-Z\s_-]+)\)[^0-9]+(?<age>[0-9]+)'}
