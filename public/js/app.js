@@ -1,3 +1,11 @@
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+ 
+Storage.prototype.getObject = function(key) {
+    return JSON.parse(this.getItem(key));
+}
+
 var Sigular = function () {
 	this.lastTest = 12;
 }
@@ -74,6 +82,13 @@ Sigular.prototype.save = function () {
 
 Sigular.prototype.viewGist = function () {
 	
+}
+
+Sigular.prototype.storeTyping = function () {
+	var data = new Object();
+	data.name = 
+	data.regex = 
+
 }
 
 

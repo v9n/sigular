@@ -212,7 +212,6 @@ end
 get '/create' do
   url = 'https://api.github.com/gists?access_token=2ed1d303c6d9db90e9be50b706983356fe5e7227'
   post_args = {
-    :access_token => "2ed1d303c6d9db90e9be50b706983356fe5e7227",
     :description  => "Second Test Sigular",
     :public       => true,
     :files        => {
@@ -255,7 +254,10 @@ get '/auth/github/callback' do
     user = JSON.parse(access_token.get('/user').body)
     session[:token] = access_token.token;
     session[:user] = Hash.new(nil);
-    session[:user][:login] = user[:login];
+    session[:user] = {
+      :login
+    }
+    [:login] = user[:login];
     session[:user][:email] = user[:email];
     session[:user][:id] = user[:id];
     "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
