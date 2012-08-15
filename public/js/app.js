@@ -107,7 +107,14 @@ Sigular.prototype.dump = function (direction) {
 			}
 
 			if (kendoka.s) {
+				var s = kendoka.s.shift();
+				var testContainer;
+				$('textarea', '#test-string-wrap').val(s);
 
+				for (var i=0, l=kendoka.s.length;i<l;i++) {
+					testContainer = this.addTest();
+					$('textarea', testContainer).val(kendoka.s[i]);
+				}
 			}
 
 			this.kendoka = kendoka;

@@ -20,8 +20,11 @@
 		%fieldset#test-string-wrap
 			.control-group.test-string.row-fluid		
 				.span6
-					%textarea{:cols => '3', 'class' => 'span12', :name => 's[]'} (Tieu Phung) thi 30 yeu (Sa Man) 29
-				.span6.test-result
+					%textarea{:cols => '3', :class => 'span12', :name => 's[]'} (Tieu Phung) thi 30 yeu (Sa Man) 29
+					%a{:href => '#delete', :class => 'btn btn-danger action-delete-ts btn-mini'}
+						%i{:class => 'icon-trash icon-white'}
+
+				.span5.test-result
 					%h6 Result
 					%p.masked-string-result	
 					%pre.prettyprint.linenums
