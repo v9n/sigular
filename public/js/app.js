@@ -69,6 +69,7 @@ Sigular.prototype.addTest = function () {
 	$('p', newElem).val('').text('');
 
 	newElem.appendTo('#test-string-wrap');
+	return newElem;
 }
 
 Sigular.prototype.newOne = function () {
@@ -93,8 +94,9 @@ Sigular.prototype.storeTyping = function () {
 
 
 Sigular.prototype.dump = function (direction) {
+	var kendoka;
 	if (direction && direction=='up') {
-		var kendoka = localStorage.getObject('kendoka');
+		kendoka = localStorage.getObject('kendoka');
 		if (kendoka) {
 			if (kendoka.descrition) {
 				$('#description').val(kendoka.descrition);			
@@ -104,12 +106,23 @@ Sigular.prototype.dump = function (direction) {
 				$('#r').val(kendoka.r);
 			}
 
+			if (kendoka.s) {
+
+			}
+
 			this.kendoka = kendoka;
 		}
 		return kendoka;	
 	} 
-	this.kendoka.descrition = $('#description').val();
-	this.kendoka.r = $('#r').val();
+	kendoka = {
+		descrition : $('#description').val(),
+		r : $('#r').val(),
+		s : []
+	}
+	$('textarea', '#test-string-wrap').length && $('textarea', '#test-string-wrap').each(function (idx, elem) {
+		kendoka.s.push($(elem).val());
+	})
+	this.kendoka = kendoka;
 	localStorage.setObject('kendoka', this.kendoka);
 	return kendoka;
 }
