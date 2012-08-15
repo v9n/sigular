@@ -7,7 +7,10 @@ Storage.prototype.getObject = function(key) {
 }
 
 var Sigular = function () {
+	//Initialize data from localstorage
+	this.kendoka = new Object();
 	this.lastTest = 12;
+	this.dump('up');
 }
 var sigular;
 
@@ -85,24 +88,51 @@ Sigular.prototype.viewGist = function () {
 }
 
 Sigular.prototype.storeTyping = function () {
-	var data = new Object();
-	data.name = 
-	data.regex = 
-
+	this.dump();
 }
 
 
+Sigular.prototype.dump = function (direction) {
+	if (direction && direction=='up') {
+		var kendoka = localStorage.getObject('kendoka');
+		if (kendoka) {
+			if (kendoka.descrition) {
+				$('#description').val(kendoka.descrition);			
+			}
+
+			if (kendoka.r) {
+				$('#r').val(kendoka.r);
+			}
+
+			this.kendoka = kendoka;
+		}
+		return kendoka;	
+	} 
+	this.kendoka.descrition = $('#description').val();
+	this.kendoka.r = $('#r').val();
+	localStorage.setObject('kendoka', this.kendoka);
+	return kendoka;
+}
+
+
+
 ;(function ($) {
-	sigular = new Sigular();
-	console.log('Start to run');
+	$(document).ready(function () {
 
-	$('#more-test').click(function (e) {
-		e.preventDefault();
-		sigular.addTest();
-	});
+		sigular = new Sigular();
+		console.log('Start to run');
 
-	//$('input, textarea', '#sigular-regex').keyup(function () {
-	$('#sigular-regex').keyup(function () {	
-		sigular.execute();
+		$('#more-test').click(function (e) {
+			e.preventDefault();
+			sigular.addTest();
+		});
+
+		//$('input, textarea', '#sigular-regex').keyup(function () {
+		$('#sigular-regex').keyup(function () {	
+			sigular.execute();
+			sigular.storeTyping();
+
+		})
+
 	})	
 })(jQuery);
